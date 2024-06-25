@@ -39,7 +39,7 @@
             @endif    
             <form action="{{url('uploadproduct')}}" method="post" enctype="multipart/form-data">
 
-            @csrf
+                @csrf
                 <div style="padding: 15px;">
                     <label>Product State</label>
                     <input style="color:black;" type="text" name="state" placeholder="Give a product state" required="">

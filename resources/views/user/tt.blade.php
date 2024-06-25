@@ -2,7 +2,6 @@
 <html lang="en">
 
   <head>
-  <base href="/public">
   @include('user.css')
 
   </head>
@@ -16,8 +15,8 @@
         <div class="row">
           <div class="col-md-12">
             <div class="text-content">
-              <h4>Best Destination</h4>
-              <h2>Make a perfect choice!</h2>
+              <h4>Your Wishes</h4>
+              <h2>Happy Travel!</h2>
             </div>
           </div>
         </div>
@@ -29,11 +28,10 @@
         <div class="row">
           <div class="col-md-12">
             <div class="section-heading">
-              <h2>Destinations</h2>
+              <h2>Latest Products</h2>
+              <a href="{{url('allstate')}}">view all states <i class="fa fa-angle-right"></i></a>
             </div>
           </div>
-
-          
 
           <div class="col-md-12">
             <table class="datatable table" style="text-align:center">             
@@ -48,7 +46,7 @@
               </thead>
               <tbody>
                 <?php $i = 1 ?>
-                @foreach($table as $cov)
+                @foreach($stateData as $cov)
                 <tr>
                   <td>{{$i++}}</td>
                   <td>{{$cov->district}}</td>
@@ -61,55 +59,66 @@
             </table>
             <br><br><hr>
           </div>
-
-          <div class="row">
-            <div class="col-md-2">
-            </div>
-            <div class="col-md-4">
-              <div class="product-item">
-                <a href="{{url('high',$state)}}"><img class ="img-thumbnail" height="200" width="200" src="/productimage/high.png" alt=""></a>
-              </div>
-            </div>  
-
-            <div class="col-md-4">
-              <div class="product-item">
-                <a href="{{url('low',$state)}}"><img class ="img-thumbnail" height="200" width="200" src="/productimage/low.png" alt=""></a>
-              </div>
-            </div> 
-            <div class="col-md-2">
-            </div>
-          </div>
-
-          <div class="row">
-           
-
-          @foreach($dest as $destination)
+          
+          @foreach($destFilter as $destination)
           <div class="col-md-4">
             <div class="product-item">
-              <a href="{{$destination->descLink}}" target="_blank"><img height="300" width="300" src="{{$destination->descImage}}" alt=""></a>
+              <a href="{{$destination->descLink}}" target="_blank"><img height="300" width="200" src="{{$destination->descImage}}" alt=""></a>
               <div class="down-content">
                 <a href="{{$destination->descLink}}" target="_blank"><h4>{{$destination->destname}}</h4></a>
-                <p><b>Price: RM{{$destination->destPrice}} Per Night</b></p>
-                <p><b>District: {{$destination->destAddress}}</b></p>
-                <p><b>Rating: {{$destination->descRate}} &nbsp;&#11088;</b></p>
+                <p><b>Price: RM{{$destination->destPrice}} </b></p>
+                <p><b>Rating : {{$destination->descRate}} &nbsp;&#11088;</b></p>
+                <p><b>Location : {{$destination->destAddress}} </b></p>
               </div>
             </div>
           </div>
           @endforeach
 
-
-
+          
         </div>
         <div class="d-flex justify-content-center">
-          {!! $dest->links() !!}
+          {!! $destFilter->links() !!}
         </div>
       </div>
-    </div>
-    
-
+</div>
 
     @include('user.footernjs')
+
     <script>
+      $(document).ready(function(){
+        $(".page-item").not(".active, .disabled").each(function(index){
+          let page = $(this).children().eq(0).attr("href")
+          $(this).children().eq(0).attr("href",`/pref?high=${findGetParameter("high")}&low=${findGetParameter("low")}&rate=${findGetParameter("rate")}&numCases=${findGetParameter("numCases")}&${arr('{!!json_encode($location)!!}')}&page=${page.split("=")[1]}`)
+        })
+      })
+
+      function findGetParameter(parameterName) {
+        var result = null,
+          tmp = [];
+        location.search
+            .substr(1)
+            .split("&")
+            .forEach(function (item) {
+              tmp = item.split("=");
+              if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+            });
+        return result;
+      }
+
+      function arr(location){
+        console.log(location);
+        let loca = JSON.parse(location);
+        // console.log(loca);
+        let locaStr = "";
+
+        loca.forEach(function(item){
+          locaStr += `location[]=${item}&`
+          // console.log(item);
+          console.log(locaStr);
+        })
+        console.log(locaStr);
+        return locaStr;
+      }
 
       function rank () {
         let row = $(".datatable").find("tr")

@@ -8,38 +8,67 @@ use App\Models\Product;
 
 use App\Models\User;
 
+use Symfony\Component\Process\Process;
+
+use Symfony\Component\Process\Exception\ProcessFailedException;
+ 
 class AdminController extends Controller
 {
+
+    public function travel(Request $request)
+    {
+        // outputs the username that owns the running php/httpd process
+        // (on a system with the "whoami" executable in the path)
+
+        // $output=null;
+        // $retval=null;
+        // exec('python pyscript\\travel.py', $output, $retval);
+        // exec('Taskkill /IM "chromedriver.exe" /F');
+        // echo "Returned with status $retval and output:\n";
+        // print_r($output);
+        // return redirect()->back()->with('messageTravel','The scraping has started!');
+
+        $process = new Process(['pyscript\\travel.bat']);
+        $process->run();
+
+        // error handling
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+
+        $output_data = $process->getOutput();
+        echo $output_data;
+
+        // $output = shell_exec("pyscript\\travel.bat 2>&1");
+
+        // return $output;
+    }
+
+    public function covid(Request $request)
+    {
+        // outputs the username that owns the running php/httpd process
+        // (on a system with the "whoami" executable in the path)
+        $output=null;
+        $retval=null;
+        exec('python pyscript\\covid.py', $output, $retval);
+        echo "Returned with status $retval and output:\n";
+
+        return redirect()->back()->with('messageCovid','The scraping has started!');
+        // $process = new Process(['C:\Program Files\Python310\python.exe', 'pyscript\\test.py']);
+        // $process->run();
+
+        // // error handling
+        // if (!$process->isSuccessful()) {
+        //     throw new ProcessFailedException($process);
+        // }
+
+        // $output_data = $process->getOutput();
+        // echo $output_data;
+    }
+
     public function product()
     {
         return view('admin.product');
-    }
-
-    public function uploadproduct(Request $request)
-    {
-        $data=new product;
-
-        $image=$request->file;
-
-        $imagename=time().'.'.$image->getClientOriginalExtension();
-
-        $request->file->move('productimage',$imagename);
-
-        $data->image=$imagename;
-
-        $data->state=$request->state;
-
-        $data->location=$request->location;
-
-        $data->description=$request->description;
-
-        $data->totalCases=$request->totalCases;
-
-        $data->save();
-
-        return redirect()->back()->with('message','Product Added Successfully');
-
-
     }
 
     public function showproduct()
@@ -48,83 +77,11 @@ class AdminController extends Controller
         return view('admin.showproduct',compact('data'));
     }
 
-    public function deleteproduct($id)
+    public function cron()
     {
-        $data=product::find($id);
-        $data->delete();
-
-        return redirect()->back()->with('message','Product Deleted Successfully');
+        return view('admin.cron');
     }
 
-    public function updateproduct($id)
-    {
-        $data=product::find($id);
-        return view('admin.updateproduct', compact('data'));
-    }
-
-    public function updateproduct2(Request $request, $id)
-    {
-        $data=product::find($id);
-
-        $image=$request->file;
-
-        if($image)
-        {
-            $imagename=time().'.'.$image->getClientOriginalExtension();
-
-            $request->file->move('productimage',$imagename);
-
-            $data->image=$imagename;
-        }
-
-        $data->state=$request->state;
-
-        $data->location=$request->location;
-
-        $data->description=$request->description;
-
-        $data->totalCases=$request->totalCases;
-
-        $data->save();
-
-        return redirect()->back()->with('message','Product Updated Successfully');
-
-    }
-
-    public function showuser()
-    {
-        $data=user::all();
-        return view('admin.showuser',compact('data'));
-    }
-
-    public function deleteuser($id)
-    {
-        $data=user::find($id);
-        $data->delete();
-
-        return redirect()->back()->with('message','User Deleted Successfully');
-    }
-
-    public function updateuser($id)
-    {
-        $data=user::find($id);
-        return view('admin.updateuser', compact('data'));
-    }
-
-    public function updateuser2(Request $request, $id)
-    {
-        $data=user::find($id);
-
-        $data->name=$request->name;
-
-        $data->email=$request->email;
-
-        $data->phone=$request->phone;
-
-        $data->save();
-
-        return redirect()->back()->with('message','User Updated Successfully');
-
-    }
+    
 
 }

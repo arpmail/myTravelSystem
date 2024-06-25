@@ -20,7 +20,10 @@
     <script src="admin/assets/js/misc.js"></script>
     <script src="admin/assets/js/settings.js"></script>
     <script src="admin/assets/js/todolist.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <!-- endinject -->
     <!-- Custom js for this page -->
     <script src="admin/assets/js/dashboard.js"></script>
     <!-- End custom js for this page -->
+
+    

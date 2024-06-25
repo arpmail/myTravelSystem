@@ -32,13 +32,19 @@ route::get('/allstate',[HomeController::class,'allstate']);
 
 route::get('/state/{state}',[HomeController::class,'state']);
 
-route::get('/location/{id}',[HomeController::class,'location']);
+route::get('/risk/{state}',[HomeController::class,'risk']);
+
+route::get('/high/{state}',[HomeController::class,'high']);
+
+route::get('/low/{state}',[HomeController::class,'low']);
 
 route::get('/preference',[HomeController::class,'preference']);
 
-route::get('/import-form',[HomeController::class,'importUploadForm']);
+route::get('/pref',[HomeController::class,'pref']);
 
-route::post('/import-form',[HomeController::class,'importForm'])->name('import.file');
+route::get('/updateUser/{email}',[HomeController::class,'updateUser']);
+
+
 
 
 route::get('/product',[AdminController::class,'product']);
@@ -60,4 +66,12 @@ route::get('/deleteuser/{id}',[AdminController::class,'deleteuser']);
 route::get('/updateuser/{id}',[AdminController::class,'updateuser']);
 
 route::post('/updateuser2/{id}',[AdminController::class,'updateuser2']);
+
+route::get('/cron',[AdminController::class,'cron']);
+
+route::post('/covid',[AdminController::class,'covid']);
+
+route::post('/travel',[AdminController::class,'travel']);
+
+
 

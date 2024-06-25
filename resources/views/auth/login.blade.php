@@ -4,6 +4,14 @@
             <x-jet-authentication-card-logo />
         </x-slot>
 
+        <script>
+            var msg = '{{Session::get('alert')}}';
+            var exist = '{{Session::has('alert')}}';
+            if(exist){
+              alert(msg);
+            }
+          </script>
+
         <x-jet-validation-errors class="mb-4" />
 
         @if (session('status'))
@@ -38,6 +46,11 @@
                         {{ __('Forgot your password?') }}
                     </a>
                 @endif
+            </div>
+
+            <div class="flex items-center justify-end mt-4">
+               
+                <a href="/register" class="btn btn-primary">Register</a>
 
                 <x-jet-button class="ml-4">
                     {{ __('Log in') }}
